@@ -8,9 +8,9 @@ import (
 	"strings"
 )
 
-// MalformedValue is returned by Value.Set if the given key/value pair is not
+// ErrMalformedValue is returned by Value.Set if the given key/value pair is not
 // valid.
-var MalformedValue = errors.New("Malformed environment key/value pair, expected <key>=<value>")
+var ErrMalformedValue = errors.New("Malformed environment key/value pair, expected <key>=<value>")
 
 // Value implements the flag.Value interface and can be used as a target for
 // flag.Var to override environment variables. It doesn’t save any value.
@@ -25,7 +25,7 @@ func NewValue() *Value { return &Value{} }
 func (v *Value) Set(s string) error {
 	parts := strings.SplitN(s, "=", 2)
 	if len(parts) != 2 {
-		return MalformedValue
+		return ErrMalformedValue
 	}
 
 	return os.Setenv(parts[0], parts[1])
